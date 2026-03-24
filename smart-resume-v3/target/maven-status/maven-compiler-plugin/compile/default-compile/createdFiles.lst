@@ -1,0 +1,9 @@
+com\smartresume\config\WebConfig.class
+com\smartresume\service\TikaParserService.class
+com\smartresume\service\ResumeService.class
+com\smartresume\SmartResumeApplication.class
+com\smartresume\service\MatchingService$MatchResult.class
+com\smartresume\controller\ResumeController.class
+com\smartresume\repository\ResumeRepository.class
+com\smartresume\service\MatchingService.class
+com\smartresume\model\Resume.class

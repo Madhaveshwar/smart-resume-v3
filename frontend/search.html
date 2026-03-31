@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart ATS — Search</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <style>
+    .skill-chip        { display:inline-block; padding:2px 10px; border-radius:9999px; font-size:0.72rem; font-weight:600; margin:2px; }
+    .chip-matched      { background:#052e16; color:#4ade80; border:1px solid #166534; }
+    .chip-missing      { background:#450a0a; color:#f87171; border:1px solid #991b1b; }
+    .chip-detected     { background:#0c1a3a; color:#93c5fd; border:1px solid #1e3a8a; }
+    .chip-role         { background:#2d1b69; color:#c4b5fd; border:1px solid #5b21b6; }
+    .suggestion-item   { background:#1c1917; border-left:3px solid #f59e0b; padding:8px 12px; margin:4px 0; border-radius:0 8px 8px 0; font-size:0.8rem; color:#fcd34d; }
+    .progress-bar-wrap { background:#374151; border-radius:9999px; height:8px; overflow:hidden; }
+    .progress-bar-fill { height:8px; border-radius:9999px; transition:width 0.6s ease; }
+    .card-glow-green   { box-shadow:0 0 0 1px #166534; }
+    .card-glow-yellow  { box-shadow:0 0 0 1px #854d0e; }
+    .card-glow-red     { box-shadow:0 0 0 1px #991b1b; }
+    .section-label     { font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px; }
+  </style>
+</head>
+<body class="bg-gray-950 min-h-screen text-white font-sans">
+
+<header class="border-b border-gray-800 px-8 py-4 flex items-center justify-between sticky top-0 z-10 bg-gray-950/95 backdrop-blur">
+  <div class="flex items-center gap-3">
+    <svg class="w-7 h-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+    <span class="text-xl font-bold tracking-tight">Smart<span class="text-blue-400">ATS</span></span>
+    <span class="hidden sm:inline text-xs text-gray-500 border border-gray-700 px-2 py-0.5 rounded-full">Industry-Level Resume Filter</span>
+  </div>
+  <nav class="flex gap-1">
+    <a href="index.html" data-page="upload" class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white">Upload</a>
+    <a href="search.html" data-page="search" class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors">Search</a>
+    <a href="dashboard.html" data-page="dashboard" class="px-4 py-1.5 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:text-white">Dashboard</a>
+  </nav>
+</header>
+
+<section class="max-w-5xl mx-auto px-6 pt-10 pb-6">
+  <h2 class="text-2xl font-bold mb-6">Search Stored Resumes</h2>
+  <div class="flex gap-3">
+    <input type="text" id="searchInput"
+           placeholder="e.g. Spring Boot, React, Machine Learning..."
+           class="flex-1 bg-gray-800 border border-gray-600 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"/>
+    <button id="searchBtn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-colors">
+      Search
+    </button>
+  </div>
+  <p id="searchSubtitle" class="text-gray-500 text-sm mt-3"></p>
+</section>
+
+<section class="max-w-5xl mx-auto px-6 pb-20">
+  <div id="resumeCards" class="flex flex-col gap-6"></div>
+</section>
+
+<footer class="border-t border-gray-800 text-center py-5 text-xs text-gray-600">
+  Smart ATS · Spring Boot · Apache Tika · MySQL · 20 Job Roles · TF-IDF Cosine Matching · Personalised AI Suggestions
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/search.js"></script>
+</body>
+</html>

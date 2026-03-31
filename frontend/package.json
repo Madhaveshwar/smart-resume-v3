@@ -1,0 +1,12 @@
+{
+  "name": "smart-resume-frontend",
+  "version": "1.0.0",
+  "description": "Smart ATS – vanilla HTML/CSS/JS frontend",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "dev": "npx live-server --port=3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

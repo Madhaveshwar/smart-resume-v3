@@ -1,0 +1,9 @@
+John Doe
+johndoe@example.com
+123-456-7890
+
+Summary:
+5 years of experience in Software Engineering. Experienced with Java, Spring Boot, React, and Python.
+
+Skills:
+Java, Spring Boot, REST API, Microservices, SQL, React, Node.js

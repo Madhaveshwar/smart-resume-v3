@@ -7,7 +7,11 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*") // allow frontend
+@CrossOrigin(origins = {
+    "https://smart-resume-inky.vercel.app",
+    "http://localhost:3000",
+    "*"
+}) // allow frontend
 public class ResumeController {
 
     @GetMapping("/job-titles")

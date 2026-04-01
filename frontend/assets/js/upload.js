@@ -1,4 +1,4 @@
-// ── LOAD JOB TITLES (FINAL FIX) ─────────────────────────
+// ── LOAD JOB TITLES (FINAL WORKING FIX) ─────────────────────────
 async function loadJobTitles() {
   console.log("🔥 Loading job titles...");
 
@@ -10,13 +10,15 @@ async function loadJobTitles() {
   }
 
   try {
+    console.log("🌐 API:", window.API_BASE);
+
     const res = await fetch(window.API_BASE + "/api/job-titles");
 
-    if (!res.ok) throw new Error("API failed");
+    if (!res.ok) throw new Error("API failed: " + res.status);
 
     const titles = await res.json();
 
-    console.log("✅ Titles:", titles);
+    console.log("✅ Titles received:", titles);
 
     sel.innerHTML = `<option value="">-- Select or leave blank --</option>`;
 
@@ -42,3 +44,12 @@ async function loadJobTitles() {
     `;
   }
 }
+
+
+// ── RUN ON PAGE LOAD (VERY IMPORTANT) ─────────────────────────
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("✅ DOM loaded");
+
+  // 🔥 THIS LINE FIXES YOUR ISSUE
+  await loadJobTitles();
+});

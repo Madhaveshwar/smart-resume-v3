@@ -92,22 +92,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const formData = new FormData();
 
-      Array.from(fileInput.files).forEach(file => {
-        formData.append("pdf_docs", file);
-      });
+      // ✅ FIX: only send ONE file (backend expects single file)
+      const file = fileInput.files[0];
+      formData.append("file", file);
 
+      // ✅ FIX: correct names
       formData.append(
-        "job_title",
+        "jobTitle",
         document.getElementById("jobTitleSelect")?.value || ""
       );
 
       formData.append(
-        "job_desc",
+        "jobDescription",
         document.getElementById("jobDescInput")?.value || ""
       );
 
       try {
-        const res = await fetch(`${window.API_BASE}/api/process`, {
+        // ✅ FIX: correct endpoint
+        const res = await fetch(`${window.API_BASE}/api/upload`, {
           method: "POST",
           body: formData
         });
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const data = await res.json();
         console.log("✅ Response:", data);
 
-        showResults(data);
+        alert("✅ Upload successful!");
 
       } catch (e) {
         console.error("❌ Upload error:", e);
@@ -143,10 +145,9 @@ function showResults(data) {
     jobTitle ? `— ${jobTitle}` : "";
 
   document.getElementById("resultSubtitle").textContent =
-    `${data.totalResumes} resume(s) processed · ranked by match score`;
+    `Upload successful`;
 
-  document.getElementById("resumeCards").innerHTML =
-    renderResumeCards(data.resumes, "results");
+  document.getElementById("resumeCards").innerHTML = "";
 }
 
 // ── Reset UI ─────────────────────────────────────────

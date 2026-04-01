@@ -1,20 +1,25 @@
-package com.smartresume.controller;
+@PostMapping("/api/process")
+@CrossOrigin(origins = "*")
+public Map<String, Object> processResumes(
+        @RequestParam("pdf_docs") List<MultipartFile> files,
+        @RequestParam(value = "job_title", required = false) String jobTitle,
+        @RequestParam(value = "job_desc", required = false) String jobDesc
+) {
+    Map<String, Object> response = new HashMap<>();
 
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+    response.put("jobTitle", jobTitle);
+    response.put("totalResumes", files.size());
 
-@RestController
-@CrossOrigin(origins = "*")   // ✅ VERY IMPORTANT
-public class ResumeController {
+    List<Map<String, Object>> resumes = new ArrayList<>();
 
-    @GetMapping("/api/job-titles")
-    public List<String> getJobTitles() {
-        return List.of(
-            "Software Engineer",
-            "Data Scientist",
-            "Web Developer",
-            "AI Engineer",
-            "DevOps Engineer"
-        );
+    for (MultipartFile file : files) {
+        Map<String, Object> r = new HashMap<>();
+        r.put("name", file.getOriginalFilename());
+        r.put("score", (int)(Math.random() * 100)); // dummy score
+        resumes.add(r);
     }
+
+    response.put("resumes", resumes);
+
+    return response;
 }

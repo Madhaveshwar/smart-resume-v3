@@ -1,175 +1,41 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("✅ Upload JS Loaded");
+  // ✅ all your existing code (fetch, upload, etc)
 
-  // Check API
-  if (!window.API_BASE) {
-    console.error("❌ API_BASE not defined");
-    return;
-  }
-
-  // ── Load Job Titles ─────────────────────────
-  try {
-    const res = await fetch(`${window.API_BASE}/api/job-titles`);
-
-    if (!res.ok) throw new Error("API error");
-
-    const titles = await res.json();
-    console.log("✅ Job Titles:", titles);
-
-    const sel = document.getElementById("jobTitleSelect");
-
-    if (!sel) {
-      console.error("❌ Dropdown not found");
-      return;
-    }
-
-    sel.innerHTML = `<option value="">-- Select or leave blank --</option>`;
-
-    titles.forEach(t => {
-      const opt = document.createElement("option");
-      opt.value = t;
-      opt.textContent = t;
-      sel.appendChild(opt);
-    });
-
-  } catch (e) {
-    console.error("❌ Failed to load job titles:", e);
-  }
-
-  // ── File Input Handling ─────────────────────
-  const fileInput = document.getElementById("fileInput");
-  const fileCount = document.getElementById("fileCount");
-
-  if (fileInput && fileCount) {
-    fileInput.addEventListener("change", () => {
-      const n = fileInput.files.length;
-      fileCount.textContent =
-        n === 0 ? "No files selected" : `${n} file${n > 1 ? "s" : ""} selected`;
-    });
-  }
-
-  // ── Drag & Drop ─────────────────────────────
-  const dropzone = document.getElementById("dropzone");
-
-  if (dropzone && fileInput && fileCount) {
-    ["dragenter", "dragover"].forEach(ev =>
-      dropzone.addEventListener(ev, e => {
-        e.preventDefault();
-        dropzone.classList.add("drag-over");
-      })
-    );
-
-    ["dragleave", "drop"].forEach(ev =>
-      dropzone.addEventListener(ev, e => {
-        e.preventDefault();
-        dropzone.classList.remove("drag-over");
-      })
-    );
-
-    dropzone.addEventListener("drop", e => {
-      const dt = new DataTransfer();
-      Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-      fileInput.files = dt.files;
-
-      const n = dt.files.length;
-      fileCount.textContent = `${n} file${n > 1 ? "s" : ""} selected`;
-    });
-  }
-
-  // ── Submit Upload ───────────────────────────
-  const submitBtn = document.getElementById("submitBtn");
-
-  if (submitBtn && fileInput) {
-    submitBtn.addEventListener("click", async () => {
-
-      if (fileInput.files.length === 0) {
-        alert("Please select at least one resume file.");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = "Analysing...";
-
-      const formData = new FormData();
-
-      const file = fileInput.files[0];
-      formData.append("file", file);
-
-      formData.append(
-        "jobTitle",
-        document.getElementById("jobTitleSelect")?.value || ""
-      );
-
-      formData.append(
-        "jobDescription",
-        document.getElementById("jobDescInput")?.value || ""
-      );
-
-      try {
-        const res = await fetch(`${window.API_BASE}/api/upload`, {
-          method: "POST",
-          body: formData
-        });
-
-        if (!res.ok) throw new Error("Upload failed");
-
-        const data = await res.json();
-        console.log("✅ Response:", data);
-
-        // ✅ SHOW RESULT UI (FIXED)
-        showResults({
-          jobTitle: data.jobTitle,
-          totalResumes: 1,
-          resumes: [
-            {
-              name: "Uploaded Resume",
-              score: "N/A",
-              skills: [],
-              suggestions: ["Analysis not implemented yet"]
-            }
-          ]
-        });
-
-      } catch (e) {
-        console.error("❌ Upload error:", e);
-        alert("Error uploading file. Check backend.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = "🔍 Analyse Resumes";
-      }
-    });
-  }
+  // inside submit:
+  // showResults(data);
 });
 
-// ── Results UI ─────────────────────────────────────────
 
+// ✅ ⬇️ PUT YOUR FUNCTION HERE (OUTSIDE DOMContentLoaded)
 function showResults(data) {
   document.getElementById("heroSection")?.classList.add("hidden");
   document.getElementById("uploadSection")?.classList.add("hidden");
   document.getElementById("resultsHeader")?.classList.remove("hidden");
 
-  const jobTitle = data.jobTitle || "";
-
   document.getElementById("resultJobTitle").textContent =
-    jobTitle ? `— ${jobTitle}` : "";
+    data.jobTitle ? `— ${data.jobTitle}` : "";
 
   document.getElementById("resultSubtitle").textContent =
     `${data.totalResumes} resume(s) processed`;
 
-  document.getElementById("resumeCards").innerHTML = `
-    <div style="padding:20px; color:white;">
-      <h3>Uploaded Resume</h3>
-      <p>Status: Uploaded successfully ✅</p>
-      <p>⚠ Analysis feature not implemented</p>
+  const container = document.getElementById("resumeCards");
+
+  container.innerHTML = data.resumes.map((r, i) => `
+    <div style="background:#111827; padding:20px; margin:15px 0; border-radius:10px;">
+      
+      <h3 style="color:white;">${i + 1}. ${r.name}</h3>
+
+      <p style="color:#22c55e;">Match Score: ${r.score}%</p>
+
+      <p style="color:#4ade80;">✔ Matched Skills: ${r.matchedSkills.join(", ")}</p>
+
+      <p style="color:#f87171;">❌ Missing Skills: ${r.missingSkills.join(", ")}</p>
+
+      <p style="color:#fbbf24;">💡 Improvements:</p>
+      <ul style="color:white;">
+        ${r.suggestions.map(s => `<li>${s}</li>`).join("")}
+      </ul>
+
     </div>
-  `;
-}
-
-// ── Reset UI ─────────────────────────────────────────
-
-function showUploadForm() {
-  document.getElementById("heroSection")?.classList.remove("hidden");
-  document.getElementById("uploadSection")?.classList.remove("hidden");
-  document.getElementById("resultsHeader")?.classList.add("hidden");
-  document.getElementById("resumeCards").innerHTML = "";
+  `).join("");
 }

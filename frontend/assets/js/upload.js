@@ -1,41 +1,45 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  // ✅ all your existing code (fetch, upload, etc)
+// ── LOAD JOB TITLES (FIXED) ─────────────────────────
+try {
+  console.log("🌐 Calling API:", window.API_BASE + "/api/job-titles");
 
-  // inside submit:
-  // showResults(data);
-});
+  const res = await fetch(window.API_BASE + "/api/job-titles");
 
+  const sel = document.getElementById("jobTitleSelect");
 
-// ✅ ⬇️ PUT YOUR FUNCTION HERE (OUTSIDE DOMContentLoaded)
-function showResults(data) {
-  document.getElementById("heroSection")?.classList.add("hidden");
-  document.getElementById("uploadSection")?.classList.add("hidden");
-  document.getElementById("resultsHeader")?.classList.remove("hidden");
+  if (!res.ok) {
+    throw new Error("API failed: " + res.status);
+  }
 
-  document.getElementById("resultJobTitle").textContent =
-    data.jobTitle ? `— ${data.jobTitle}` : "";
+  const titles = await res.json();
 
-  document.getElementById("resultSubtitle").textContent =
-    `${data.totalResumes} resume(s) processed`;
+  console.log("✅ Titles received:", titles);
 
-  const container = document.getElementById("resumeCards");
+  // 🔥 IMPORTANT FIX
+  if (!titles || titles.length === 0) {
+    throw new Error("No data from API");
+  }
 
-  container.innerHTML = data.resumes.map((r, i) => `
-    <div style="background:#111827; padding:20px; margin:15px 0; border-radius:10px;">
-      
-      <h3 style="color:white;">${i + 1}. ${r.name}</h3>
+  sel.innerHTML = `<option value="">-- Select or leave blank --</option>`;
 
-      <p style="color:#22c55e;">Match Score: ${r.score}%</p>
+  titles.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    sel.appendChild(opt);
+  });
 
-      <p style="color:#4ade80;">✔ Matched Skills: ${r.matchedSkills.join(", ")}</p>
+} catch (e) {
+  console.error("❌ Job titles error:", e);
 
-      <p style="color:#f87171;">❌ Missing Skills: ${r.missingSkills.join(", ")}</p>
+  // 🔥 FALLBACK (VERY IMPORTANT)
+  const sel = document.getElementById("jobTitleSelect");
 
-      <p style="color:#fbbf24;">💡 Improvements:</p>
-      <ul style="color:white;">
-        ${r.suggestions.map(s => `<li>${s}</li>`).join("")}
-      </ul>
-
-    </div>
-  `).join("");
+  sel.innerHTML = `
+    <option>Software Engineer</option>
+    <option>Data Scientist</option>
+    <option>Web Developer</option>
+    <option>AI Engineer</option>
+    <option>Backend Developer</option>
+    <option>Frontend Developer</option>
+  `;
 }

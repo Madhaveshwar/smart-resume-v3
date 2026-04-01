@@ -1,3 +1,4 @@
+```javascript
 // ── Upload Page Logic ─────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ── Load Job Titles ─────────────────────────
   try {
-    const res = await fetch(window.API_BASE + "/job-titles");
+    const res = await fetch(window.API_BASE + "/api/job-titles"); // ✅ FIXED
 
     if (!res.ok) throw new Error("API error");
 
@@ -96,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const formData = new FormData();
 
-      // 🔥 IMPORTANT (matches backend)
+      // Matches backend
       Array.from(fileInput.files).forEach(file => {
         formData.append("pdf_docs", file);
       });
@@ -112,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
 
       try {
-        const res = await fetch(window.API_BASE + "/process", {
+        const res = await fetch(window.API_BASE + "/api/process", { // ✅ FIXED
           method: "POST",
           body: formData
         });
@@ -164,3 +165,4 @@ function showUploadForm() {
   document.getElementById("resultsHeader")?.classList.add("hidden");
   document.getElementById("resumeCards").innerHTML = "";
 }
+```

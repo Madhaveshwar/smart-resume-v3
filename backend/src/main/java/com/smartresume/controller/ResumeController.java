@@ -20,13 +20,19 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
-    // ✅ TEST API
-    @GetMapping("")
+    // ✅ TEST API (FIXED)
+    @GetMapping("/")
     public String testApi() {
         return "API is working ✅";
     }
 
-    // ✅ FIXED JOB TITLES (NO SERVICE DEPENDENCY)
+    // ✅ DEBUG (VERY IMPORTANT)
+    @GetMapping("/debug")
+    public String debug() {
+        return "DEBUG OK 🚀";
+    }
+
+    // ✅ JOB TITLES
     @GetMapping("/job-titles")
     public List<String> getJobTitles() {
         return List.of(
@@ -38,6 +44,7 @@ public class ResumeController {
         );
     }
 
+    // ✅ PROCESS RESUMES
     @PostMapping("/process")
     public ResponseEntity<Map<String, Object>> processResumes(
             @RequestParam("pdf_docs") List<MultipartFile> files,

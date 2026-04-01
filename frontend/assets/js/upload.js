@@ -1,4 +1,6 @@
-```javascript
+// ✅ Backend URL (ADD THIS)
+window.API_BASE = "https://smart-resume-8cg6.onrender.com";
+
 // ── Upload Page Logic ─────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -12,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ── Load Job Titles ─────────────────────────
   try {
-    const res = await fetch(window.API_BASE + "/api/job-titles"); // ✅ FIXED
+    const res = await fetch(window.API_BASE + "/api/job-titles");
 
     if (!res.ok) throw new Error("API error");
 
@@ -97,7 +99,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const formData = new FormData();
 
-      // Matches backend
       Array.from(fileInput.files).forEach(file => {
         formData.append("pdf_docs", file);
       });
@@ -113,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
 
       try {
-        const res = await fetch(window.API_BASE + "/api/process", { // ✅ FIXED
+        const res = await fetch(window.API_BASE + "/api/process", {
           method: "POST",
           body: formData
         });
@@ -136,7 +137,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
 // ── Results UI ─────────────────────────────────────────────────────
 
 function showResults(data) {
@@ -156,7 +156,6 @@ function showResults(data) {
     renderResumeCards(data.resumes, "results");
 }
 
-
 // ── Reset UI ───────────────────────────────────────────────────────
 
 function showUploadForm() {
@@ -165,4 +164,3 @@ function showUploadForm() {
   document.getElementById("resultsHeader")?.classList.add("hidden");
   document.getElementById("resumeCards").innerHTML = "";
 }
-```

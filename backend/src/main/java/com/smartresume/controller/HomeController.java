@@ -10,4 +10,10 @@ public class HomeController {
     public String home() {
         return "Smart Resume Backend is Running 🚀";
     }
+
+    // ✅ ADD THIS (IMPORTANT)
+    @GetMapping("/api")
+    public String api() {
+        return "API is working ✅";
+    }
 }

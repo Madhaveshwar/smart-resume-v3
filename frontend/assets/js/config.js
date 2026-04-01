@@ -1,4 +1,4 @@
 // ── API Base URL ─────────────────────────────────────────
 
-// ✅ Your Render Backend
-window.API_BASE = "https://smart-resume-cb5c.onrender.com";
+// ✅ CORRECT Render backend URL
+window.API_BASE = "https://smart-resume-8cg6.onrender.com";

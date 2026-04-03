@@ -61,7 +61,9 @@ async function initUpload() {
   if (fileInput && dropzone && fileCount) {
     fileInput.addEventListener("change", () => {
       if (fileInput.files.length > 0) {
-        fileCount.textContent = fileInput.files[0].name;
+        fileCount.textContent = fileInput.files.length === 1 
+          ? fileInput.files[0].name 
+          : `${fileInput.files.length} files selected`;
       } else {
         fileCount.textContent = "No files selected";
       }
@@ -92,21 +94,21 @@ async function initUpload() {
     analyzeBtn.addEventListener("click", async () => {
 
       if (!fileInput.files || fileInput.files.length === 0) {
-        alert("Please select a file.");
+        alert("Please select at least one file.");
         return;
       }
 
-      const file = fileInput.files[0];
-
-      console.log("📂 Selected file:", file);
+      console.log("📂 Selected files:", fileInput.files);
 
       analyzeBtn.disabled = true;
       analyzeBtn.innerHTML = "Analysing...";
 
       const formData = new FormData();
 
-      // ✅ IMPORTANT FIX (match backend exactly)
-      formData.append("file", file);
+      // 🔥 IMPORTANT FIX: MULTIPLE FILES
+      Array.from(fileInput.files).forEach(file => {
+        formData.append("files", file);
+      });
 
       formData.append(
         "jobTitle",
